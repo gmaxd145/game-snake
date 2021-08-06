@@ -202,17 +202,20 @@ class MAIN:
         global game_over
 
         game_over = True
-        # self.snake.body = [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
-        # pygame.quit()
-        # sys.exit()
 
     def game_restart(self):
-        game_over_surface = restart_game_font.render('Game Over', True, (56, 75, 12))
+        game_over_surface = game_over_font.render('Game Over', True, (56, 75, 12))
         game_over_x = cell_size * (cell_number // 2)
         game_over_y = cell_size * (cell_number // 4)
         game_over_rect = game_over_surface.get_rect(center=(game_over_x, game_over_y))
 
+        game_restart_surface = game_restart_font.render('Press R to restart', True, (56, 75, 12))
+        game_restart_x = cell_size * (cell_number // 2)
+        game_restart_y = cell_size * (cell_number // 1.5)
+        game_restart_rect = game_restart_surface.get_rect(center=(game_restart_x, game_restart_y))
+
         screen.blit(game_over_surface, game_over_rect)
+        screen.blit(game_restart_surface, game_restart_rect)
 
 
 # pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -221,9 +224,10 @@ cell_size = 40
 cell_number = 20
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((cell_number * cell_size, cell_number * cell_size))
-apple = pygame.image.load('graphics/apple.png').convert_alpha()
+apple = pygame.image.load('Graphics/apple.png').convert_alpha()
 game_score_font = pygame.font.Font('Font/Bubblegum.ttf', 35)
-restart_game_font = pygame.font.Font('Font/Bubblegum.ttf', 100)
+game_over_font = pygame.font.Font('Font/Bubblegum.ttf', 100)
+game_restart_font = pygame.font.Font('Font/Pacho DEMO.ttf', 75)
 
 icon = pygame.image.load('Images/icon_snake.png')
 pygame.display.set_icon(icon)
@@ -238,7 +242,7 @@ delay_flag = False
 start_time = pygame.time.get_ticks()
 
 game_over = False
-# !!!
+
 while True:
     if not game_over:
         if not delay_flag:
@@ -274,6 +278,12 @@ while True:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    main_game.snake.body = [Vector2(5, 10), Vector2(4, 10), Vector2(3, 10)]
+                    main_game.snake.direction = Vector2(1, 0)
+                    game_over = False
+
         screen.fill((160, 201, 61))
         main_game.draw_grass()
         main_game.draw_score()
